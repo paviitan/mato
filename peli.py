@@ -69,7 +69,7 @@ def print_room(room, snake, available_space):
         print(" ".join(line))
 
 if __name__ == "__main__":
-    """ For testing game logic, lets create 10x10 room and list of available coordinates. """
+    """ For testing game logic, creates 10x10 room and list of available coordinates. Spawns snake. Moves snake with list of moves and for-loop """
     room = []
     available_space = []
     snake = []
