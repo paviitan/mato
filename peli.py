@@ -1,4 +1,10 @@
 from time import sleep
+from os import system, name
+
+
+def cls():
+    """ Attempts to clear the console depending on OS """
+    system('cls' if name=='nt' else 'clear')
 
 def spawn_snake(available_space):
     """ Spawn snake of lenght 3 to topleft corner of the room """
@@ -74,49 +80,15 @@ if __name__ == "__main__":
     for y in range(len(room)):
         for x in range(len(room[y])):
             available_space.append((x,y)) #for collecting tuples of available coordinates
-    # Moving the worm manually
+            
+    # Moving the worm in for-loop
     # sleep() for timedelay (in seconds)
-    print()
-    sleep(1)
     snake = spawn_snake(available_space)
-    print_room(room,snake,available_space)
-    
-    
-    print()
-    sleep(1)
-    direction = "E"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
-    
-    print()
-    sleep(1)
-    direction = "N"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
-"""    
-    print()
-    sleep(1)
-    direction = "S"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
-    
-    
-    print()
-    sleep(1)
-    direction = "S"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
+    moves = ["E","E","E","S","S","S","W","W","W","N","N","N","N","N","N"]
+    for i in range(len(moves)):
+        sleep(1)
+        cls()
+        direction = moves[i]
+        move_snake(direction,available_space,snake)
+        print_room(room,snake,available_space)
 
-    print()
-    sleep(1)
-    direction = "W"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
-    
-    
-    print()
-    sleep(1)
-    direction = "W"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
-"""   
