@@ -11,20 +11,41 @@ def move_snake(direction,available_space,snake):
     x,y = snake[0]
     old_space = snake.pop(-1)
     if direction == "E":
-        asked_space = (x+1,y)
+        requested_space = (x+1,y)
         try:
-            available_space.remove(asked_space)
+            available_space.remove(requested_space)
         except(IndexError):
             pass
         else:
-            snake.insert(0,asked_space)
+            snake.insert(0,requested_space)
             available_space.append(old_space)
     elif direction == "W":
-        pass
+            requested_space = (x-1,y)
+        try:
+            available_space.remove(requested_space)
+        except(IndexError):
+            pass
+        else:
+            snake.insert(0,requested_space)
+            available_space.append(old_space)
     elif direction == "N":
-        pass
+            requested_space = (x,y-1)
+        try:
+            available_space.remove(requested_space)
+        except(IndexError):
+            pass
+        else:
+            snake.insert(0,requested_space)
+            available_space.append(old_space)
     elif direction == "S":
-        pass
+            requested_space = (x,y+1)
+        try:
+            available_space.remove(requested_space)
+        except(IndexError):
+            pass
+        else:
+            snake.insert(0,requested_space)
+            available_space.append(old_space)
     else:
         pass
         
