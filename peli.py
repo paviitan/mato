@@ -1,21 +1,23 @@
+from time import sleep
+
 def spawn_snake(available_space):
     """ Spawn snake of lenght 3 to topleft corner of the room """
     snake = available_space[0:3]
     for i in range(len(snake)):
         available_space.remove(snake[i])
-    snake.reverse()
+    snake.reverse() #so moving can start to east
     return snake
     
 def move_snake(direction,available_space,snake):
-    """ Get direction and check if next coordinate is available. If true, moves snake by setting new coordinate as index 0 and removing index -1. -1 index also comes available so append it to "available_space" list """
+    """ Get direction and check if next coordinate is available. If true, moves snake by setting new coordinate as index 0 and removing index -1. snake[-1] coordinate also comes available so append it to "available_space" list """
     x,y = snake[0]
     old_space = snake.pop(-1)
     if direction == "E":
         requested_space = (x+1,y)
         try:
             available_space.remove(requested_space)
-        except(IndexError):
-            pass
+        except(ValueError):
+            print("Tööt!")
         else:
             snake.insert(0,requested_space)
             available_space.append(old_space)
@@ -23,8 +25,8 @@ def move_snake(direction,available_space,snake):
         requested_space = (x-1,y)
         try:
             available_space.remove(requested_space)
-        except(IndexError):
-            pass
+        except(ValueError):
+            print("Tööt!")
         else:
             snake.insert(0,requested_space)
             available_space.append(old_space)
@@ -32,8 +34,8 @@ def move_snake(direction,available_space,snake):
         requested_space = (x,y-1)
         try:
             available_space.remove(requested_space)
-        except(IndexError):
-            pass
+        except(ValueError):
+            print("Tööt!")
         else:
             snake.insert(0,requested_space)
             available_space.append(old_space)
@@ -41,8 +43,8 @@ def move_snake(direction,available_space,snake):
         requested_space = (x,y+1)
         try:
             available_space.remove(requested_space)
-        except(IndexError):
-            pass
+        except(ValueError):
+            print("Tööt!")
         else:
             snake.insert(0,requested_space)
             available_space.append(old_space)
@@ -72,24 +74,49 @@ if __name__ == "__main__":
     for y in range(len(room)):
         for x in range(len(room[y])):
             available_space.append((x,y)) #for collecting tuples of available coordinates
-    
+    # Moving the worm manually
+    # sleep() for timedelay (in seconds)
+    print()
+    sleep(1)
     snake = spawn_snake(available_space)
     print_room(room,snake,available_space)
+    
+    
+    print()
+    sleep(1)
     direction = "E"
     move_snake(direction,available_space,snake)
     print_room(room,snake,available_space)
-    direction = "S"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
-    direction = "S"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
-    direction = "W"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
-    direction = "W"
-    move_snake(direction,available_space,snake)
-    print_room(room,snake,available_space)
+    
+    print()
+    sleep(1)
     direction = "N"
     move_snake(direction,available_space,snake)
     print_room(room,snake,available_space)
+"""    
+    print()
+    sleep(1)
+    direction = "S"
+    move_snake(direction,available_space,snake)
+    print_room(room,snake,available_space)
+    
+    
+    print()
+    sleep(1)
+    direction = "S"
+    move_snake(direction,available_space,snake)
+    print_room(room,snake,available_space)
+
+    print()
+    sleep(1)
+    direction = "W"
+    move_snake(direction,available_space,snake)
+    print_room(room,snake,available_space)
+    
+    
+    print()
+    sleep(1)
+    direction = "W"
+    move_snake(direction,available_space,snake)
+    print_room(room,snake,available_space)
+"""   
