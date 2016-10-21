@@ -20,7 +20,7 @@ def move_snake(direction,available_space,snake):
             snake.insert(0,requested_space)
             available_space.append(old_space)
     elif direction == "W":
-            requested_space = (x-1,y)
+        requested_space = (x-1,y)
         try:
             available_space.remove(requested_space)
         except(IndexError):
@@ -29,7 +29,7 @@ def move_snake(direction,available_space,snake):
             snake.insert(0,requested_space)
             available_space.append(old_space)
     elif direction == "N":
-            requested_space = (x,y-1)
+        requested_space = (x,y-1)
         try:
             available_space.remove(requested_space)
         except(IndexError):
@@ -38,7 +38,7 @@ def move_snake(direction,available_space,snake):
             snake.insert(0,requested_space)
             available_space.append(old_space)
     elif direction == "S":
-            requested_space = (x,y+1)
+        requested_space = (x,y+1)
         try:
             available_space.remove(requested_space)
         except(IndexError):
@@ -78,7 +78,18 @@ if __name__ == "__main__":
     direction = "E"
     move_snake(direction,available_space,snake)
     print_room(room,snake,available_space)
+    direction = "S"
     move_snake(direction,available_space,snake)
     print_room(room,snake,available_space)
+    direction = "S"
+    move_snake(direction,available_space,snake)
+    print_room(room,snake,available_space)
+    direction = "W"
+    move_snake(direction,available_space,snake)
+    print_room(room,snake,available_space)
+    direction = "W"
+    move_snake(direction,available_space,snake)
+    print_room(room,snake,available_space)
+    direction = "N"
     move_snake(direction,available_space,snake)
     print_room(room,snake,available_space)
