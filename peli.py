@@ -1,11 +1,12 @@
 from time import sleep
 from os import system, name
+from random import randint
 
 
 def cls():
     """ Attempts to clear the console depending on OS """
     system('cls' if name=='nt' else 'clear')
-
+    
 def spawn_snake(available_space):
     """ Spawn snake of lenght 3 to topleft corner of the room """
     snake = available_space[0:3]
@@ -65,6 +66,7 @@ def print_room(room, snake, available_space):
     for i in range(len(available_space)):
         x,y = available_space[i]
         room[y][x] = "#"
+    
     for line in room:
         print(" ".join(line))
 
@@ -73,6 +75,7 @@ if __name__ == "__main__":
     room = []
     available_space = []
     snake = []
+    apple = []
     for y in range(10):
         room.append([])
         for x in range(10):
@@ -84,11 +87,11 @@ if __name__ == "__main__":
     # Moving the worm in for-loop
     # sleep() for timedelay (in seconds)
     snake = spawn_snake(available_space)
-    moves = ["E","E","E","S","S","S","W","W","W","N","N","N","N","N","N"]
+    moves = ["E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N"]
     for i in range(len(moves)):
-        sleep(1)
+        sleep(0.033)
         cls()
         direction = moves[i]
-        move_snake(direction,available_space,snake)
-        print_room(room,snake,available_space)
+        move_snake(direction, available_space, snake)
+        print_room(room, snake, available_space)
 
