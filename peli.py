@@ -1,13 +1,14 @@
-from time import sleep
-from os import system, name
+from os import system, name as system_name
 from random import randint
 from msvcrt import getwche, kbhit
 from time import time
 
+SPEED = 7
+SCORE = 0
 
 def cls():
     """ Attempts to clear the console depending on OS """
-    system('cls' if name=='nt' else 'clear')
+    system('cls' if system_name=='nt' else 'clear')
     
 def spawn_snake(available_space):
     """ Spawn snake of lenght 3 to topleft corner of the room """
@@ -42,7 +43,7 @@ def check_moves(available_space):
         return True
         
 def get_keypress():
-    timeout = 0.25
+    timeout = 1.0/SPEED
     start_time = time()
     keypress = None
     while True:
@@ -168,7 +169,7 @@ def init_room(height = 11, width = 11):
     return(room, available_space)
     
 def print_room(room, snake, apple, available_space):
-    """ For snake room coordinate = x, for available space room coordinate # -- print"""
+    """ Print the room """
     for i in range(len(snake)):
         x,y = snake[i]
         room[y][x] = "x"
@@ -184,10 +185,10 @@ def print_room(room, snake, apple, available_space):
         print(" ".join(line))
 
 if __name__ == "__main__":
-    """ For testing game logic, creates 10x10 room and list of available coordinates. Spawns snake. Moves snake with list of moves and for-loop """
+    """ Main game loop """
     snake = []
     apple = []
-    room, available_space = init_room()
+    room, available_space = init_room(20,20)
     
     #moving worm with keypress
     #msvcrt / getwch only works on windows
