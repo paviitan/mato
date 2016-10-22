@@ -170,7 +170,7 @@ if __name__ == "__main__":
                 sleep(0.033)
                 cls()
                 move_snake(direction, available_space, snake)
-                print_room(room, snake, available_space)
+                print_room(room, snake, apple, available_space)
                 direction = turn_snake(direction)
             elif check_apple(apple) == False:
                 apple = spawn_apple(available_space)
