@@ -1,6 +1,7 @@
 from time import sleep
 from os import system, name
 from random import randint
+from msvcrt import getwche
 
 
 def cls():
@@ -30,6 +31,7 @@ def check_apple(apple):
         return False
     else:
         return True
+        
 def check_moves(available_space):
     try:
         check = available_space[-1]
@@ -37,12 +39,24 @@ def check_moves(available_space):
         return False
     else:
         return True
-    
+        
+def get_keypress():
+    keypress = getwche()
+    #print(keypress)
+    if keypress == "a":
+        return "Left"
+    elif keypress == "d":
+        return "Right"
+    elif keypress == "w":
+        return "Forward"
+    else:
+        quit()
+
 def turn_snake(direction):
     """ Turns snake relative to previous direction """
     directions = ["N", "W", "S", "E"]
-    turn = input("Direction: ").lower()
-    if turn == "d":
+    turn = get_keypress()
+    if turn == "Right":
         index = directions.index(direction)
         try:
             direction = directions[index-1]
@@ -50,7 +64,7 @@ def turn_snake(direction):
             return directions[-1]
         else:
             return direction
-    elif turn == "a":
+    elif turn == "Left":
         directions.reverse()
         index = directions.index(direction)
         try:
@@ -176,3 +190,6 @@ if __name__ == "__main__":
                 apple = spawn_apple(available_space)
         else:
             print("Voitit pelin!")
+
+   
+
