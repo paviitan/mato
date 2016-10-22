@@ -87,6 +87,7 @@ def turn_snake(direction):
     
 def move_snake(direction,available_space,snake):
     """ Get direction and check if next coordinate is available. If true, moves snake by setting new coordinate as index 0 and removing index -1. snake[-1] coordinate also comes available so append it to "available_space" list """
+    
     x,y = snake[0]
     old_space = snake.pop(-1)
     if direction == "E":
@@ -151,7 +152,21 @@ def move_snake(direction,available_space,snake):
             available_space.append(old_space)
     else:
         pass
-        
+def init_room(height = 11, width = 11):
+    """ Initializes 10x10 room and list of available coordinates. Additional borders for better viewing pleasure """
+    room = []
+    available_space = []
+    
+    for y in range(height):
+        room.append([])
+        for x in range(width):
+            room[-1].append("-")
+    #available area for playing
+    for y in range(1,len(room)-1):
+        for x in range(1,len(room[y])-1):
+            available_space.append((x,y)) #for collecting tuples of available coordinates
+    return(room, available_space)
+    
 def print_room(room, snake, apple, available_space):
     """ For snake room coordinate = x, for available space room coordinate # -- print"""
     for i in range(len(snake)):
@@ -159,7 +174,7 @@ def print_room(room, snake, apple, available_space):
         room[y][x] = "x"
     for i in range(len(available_space)):
         x,y = available_space[i]
-        room[y][x] = "#"
+        room[y][x] = " "
     try:
         x,y = apple[-1]
         room[y][x] = "o"
@@ -170,18 +185,10 @@ def print_room(room, snake, apple, available_space):
 
 if __name__ == "__main__":
     """ For testing game logic, creates 10x10 room and list of available coordinates. Spawns snake. Moves snake with list of moves and for-loop """
-    room = []
-    available_space = []
     snake = []
     apple = []
-    for y in range(10):
-        room.append([])
-        for x in range(10):
-            room[-1].append("#")
-    for y in range(len(room)):
-        for x in range(len(room[y])):
-            available_space.append((x,y)) #for collecting tuples of available coordinates
-            
+    room, available_space = init_room()
+    
     #moving worm with keypress
     #msvcrt / getwch only works on windows
     snake = spawn_snake(available_space)
