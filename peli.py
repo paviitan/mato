@@ -15,6 +15,31 @@ def spawn_snake(available_space):
     snake.reverse() #so moving can start to east
     return snake
     
+def turn_snake(direction):
+    """ Turns snake relative to previous direction """
+    directions = ["N", "W", "S", "E"]
+    turn = input("Direction: ").lower()
+    if turn == "d":
+        index = directions.index(direction)
+        try:
+            direction = directions[index-1]
+        except(IndexError):
+            return directions[-1]
+        else:
+            return direction
+    elif turn == "a":
+        directions.reverse()
+        index = directions.index(direction)
+        try:
+            direction = directions[index-1]
+        except(IndexError):
+            return directions[-1]
+        else:
+            return direction
+    else:
+        return direction
+    
+    
 def move_snake(direction,available_space,snake):
     """ Get direction and check if next coordinate is available. If true, moves snake by setting new coordinate as index 0 and removing index -1. snake[-1] coordinate also comes available so append it to "available_space" list """
     x,y = snake[0]
@@ -87,11 +112,11 @@ if __name__ == "__main__":
     # Moving the worm in for-loop
     # sleep() for timedelay (in seconds)
     snake = spawn_snake(available_space)
-    moves = ["E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N"]
-    for i in range(len(moves)):
+    direction = "E"
+    while True:
         sleep(0.033)
         cls()
-        direction = moves[i]
         move_snake(direction, available_space, snake)
         print_room(room, snake, available_space)
+        direction = turn_snake(direction)
 
