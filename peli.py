@@ -174,8 +174,8 @@ if __name__ == "__main__":
         for x in range(len(room[y])):
             available_space.append((x,y)) #for collecting tuples of available coordinates
             
-    # Moving the worm in for-loop
-    # sleep() for timedelay (in seconds)
+    #moving worm with keypress
+    #msvcrt / getwch only works on windows
     snake = spawn_snake(available_space)
     direction = "E"
     while True:
