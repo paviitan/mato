@@ -1,7 +1,8 @@
 from time import sleep
 from os import system, name
 from random import randint
-from msvcrt import getwche
+from msvcrt import getwche, kbhit
+from time import time
 
 
 def cls():
@@ -41,16 +42,23 @@ def check_moves(available_space):
         return True
         
 def get_keypress():
-    keypress = getwche()
-    #print(keypress)
+    timeout = 0.25
+    start_time = time()
+    keypress = None
+    while True:
+        if kbhit():
+            keypress = getwche()
+            break
+        elif time() - start_time > timeout:
+            break
     if keypress == "a":
         return "Left"
     elif keypress == "d":
         return "Right"
-    elif keypress == "w":
-        return "Forward"
-    else:
+    elif keypress == "q":
         quit()
+    else:
+        return "Forward"
 
 def turn_snake(direction):
     """ Turns snake relative to previous direction """
@@ -181,11 +189,10 @@ if __name__ == "__main__":
     while True:
         if check_moves(available_space) == True:
             if check_apple(apple) == True:
-                sleep(0.033)
+                direction = turn_snake(direction)
                 cls()
                 move_snake(direction, available_space, snake)
                 print_room(room, snake, apple, available_space)
-                direction = turn_snake(direction)
             elif check_apple(apple) == False:
                 apple = spawn_apple(available_space)
         else:
