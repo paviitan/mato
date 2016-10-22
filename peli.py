@@ -14,6 +14,27 @@ def spawn_snake(available_space):
         available_space.remove(snake[i])
     snake.reverse() #so moving can start to east
     return snake
+def spawn_apple(available_space):
+    """ Spawn one apple randomly to available_space """
+    apple = []
+    n = randint(0,len(available_space)-1)
+    apple.append(available_space[n])
+    available_space.remove(apple[-1])
+    return apple
+def check_apple(apple):
+    try:
+        check = apple[-1]
+    except(IndexError):
+        return False
+    else:
+        return True
+def check_moves(available_space):
+    try:
+        check = available_space[-1]
+    except(IndexError):
+        return False
+    else:
+        return True
     
 def move_snake(direction,available_space,snake):
     """ Get direction and check if next coordinate is available. If true, moves snake by setting new coordinate as index 0 and removing index -1. snake[-1] coordinate also comes available so append it to "available_space" list """
@@ -24,7 +45,13 @@ def move_snake(direction,available_space,snake):
         try:
             available_space.remove(requested_space)
         except(ValueError):
-            print("Tööt!")
+            try:
+                apple.remove(requested_space)
+            except(ValueError):
+                print("Tööt!")
+            else:
+                snake.insert(0,requested_space)
+                snake.append(old_space)
         else:
             snake.insert(0,requested_space)
             available_space.append(old_space)
@@ -33,7 +60,13 @@ def move_snake(direction,available_space,snake):
         try:
             available_space.remove(requested_space)
         except(ValueError):
-            print("Tööt!")
+            try:
+                apple.remove(requested_space)
+            except(ValueError):
+                print("Tööt!")
+            else:
+                snake.insert(0,requested_space)
+                snake.append(old_space)
         else:
             snake.insert(0,requested_space)
             available_space.append(old_space)
@@ -42,7 +75,13 @@ def move_snake(direction,available_space,snake):
         try:
             available_space.remove(requested_space)
         except(ValueError):
-            print("Tööt!")
+            try:
+                apple.remove(requested_space)
+            except(ValueError):
+                print("Tööt!")
+            else:
+                snake.insert(0,requested_space)
+                snake.append(old_space)
         else:
             snake.insert(0,requested_space)
             available_space.append(old_space)
@@ -51,14 +90,20 @@ def move_snake(direction,available_space,snake):
         try:
             available_space.remove(requested_space)
         except(ValueError):
-            print("Tööt!")
+            try:
+                apple.remove(requested_space)
+            except(ValueError):
+                print("Tööt!")
+            else:
+                snake.insert(0,requested_space)
+                snake.append(old_space)
         else:
             snake.insert(0,requested_space)
             available_space.append(old_space)
     else:
         pass
         
-def print_room(room, snake, available_space):
+def print_room(room, snake, apple, available_space):
     """ For snake room coordinate = x, for available space room coordinate # -- print"""
     for i in range(len(snake)):
         x,y = snake[i]
@@ -66,7 +111,11 @@ def print_room(room, snake, available_space):
     for i in range(len(available_space)):
         x,y = available_space[i]
         room[y][x] = "#"
-    
+    try:
+        x,y = apple[-1]
+        room[y][x] = "o"
+    except(IndexError):
+        pass
     for line in room:
         print(" ".join(line))
 
@@ -87,11 +136,17 @@ if __name__ == "__main__":
     # Moving the worm in for-loop
     # sleep() for timedelay (in seconds)
     snake = spawn_snake(available_space)
+    apple = spawn_apple(available_space)
     moves = ["E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N","E","E","E","S","S","S","W","W","W","N","N"]
     for i in range(len(moves)):
-        sleep(0.033)
-        cls()
-        direction = moves[i]
-        move_snake(direction, available_space, snake)
-        print_room(room, snake, available_space)
-
+        if check_moves(available_space) == True:
+            if check_apple(apple) == True:
+                sleep(0.033)
+                cls()
+                direction = moves[i]
+                move_snake(direction, available_space, snake)
+                print_room(room, snake, apple, available_space)
+            elif check_apple(apple) == False:
+                apple = spawn_apple(available_space)
+        else:
+            print("Voitit pelin!")
