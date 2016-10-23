@@ -22,24 +22,14 @@ def spawn_apple(available_space):
     apple = []
     n = randint(0,len(available_space)-1)
     apple.append(available_space[n])
-    available_space.remove(apple[-1])
     return apple
     
-def check_apple(apple):
-    try:
-        check = apple[-1]
-    except(IndexError):
-        return False
-    else:
+def check_if_empty(list):
+    """ Checks if list is depleted """
+    if len(list) == 0:
         return True
-        
-def check_moves(available_space):
-    try:
-        check = available_space[-1]
-    except(IndexError):
-        return False
     else:
-        return True
+        return False
         
 def get_keypress():
     timeout = 1.0/SPEED
@@ -60,97 +50,60 @@ def get_keypress():
     else:
         return "Forward"
 
-def turn_snake(direction, available_space, apple):
+def turn_snake(direction, available_space, snake):
     """ Turns snake relative to previous direction IF available """
-    directions = ["N", "W", "S", "E"]
+    x1,y1 = snake[0]
+    last_direction = direction
+    directions = ["N","W","S","E"]
+    d_coords = {"N":(0,-1), "W":(-1,0), "S":(0,1), "E":(1,0)}
     turn = get_keypress()
     if turn == "Right":
-        index = directions.index(direction)
+        index = directions.index(direction) - 1
         try:
-            direction = directions[index-1]
+            new_direction = directions[index]
         except(IndexError):
-            return directions[-1]
+            new_direction = directions[-1]
+        x2,y2 = d_coords[new_direction]
+        if available_space.count((x1+x2,y1+y2)) != 1:
+            return last_direction
         else:
-            return direction
+            return new_direction
     elif turn == "Left":
-        directions.reverse()
-        index = directions.index(direction)
+        index = directions.index(direction) + 1
         try:
-            direction = directions[index-1]
+            new_direction = directions[index]
         except(IndexError):
-            return directions[-1]
+            new_direction = directions[0]
+        x2,y2 = d_coords[new_direction]
+        if available_space.count((x1+x2,y1+y2)) != 1:
+            return last_direction
         else:
-            return direction
+            return new_direction
     else:
-        return direction
+        return last_direction
+  
     
-def move_snake(direction,available_space,snake):
-    """ Get direction and check if next coordinate is available. If true, moves snake by setting new coordinate as index 0 and removing index -1. snake[-1] coordinate also comes available so append it to "available_space" list """
-    
-    x,y = snake[0]
-    old_space = snake.pop(-1)
-    if direction == "E":
-        requested_space = (x+1,y)
-        try:
-            available_space.remove(requested_space)
-        except(ValueError):
-            try:
-                apple.remove(requested_space)
-            except(ValueError):
-                print("Tööt!")
-            else:
-                snake.insert(0,requested_space)
-                snake.append(old_space)
-        else:
-            snake.insert(0,requested_space)
-            available_space.append(old_space)
-    elif direction == "W":
-        requested_space = (x-1,y)
-        try:
-            available_space.remove(requested_space)
-        except(ValueError):
-            try:
-                apple.remove(requested_space)
-            except(ValueError):
-                print("Tööt!")
-            else:
-                snake.insert(0,requested_space)
-                snake.append(old_space)
-        else:
-            snake.insert(0,requested_space)
-            available_space.append(old_space)
-    elif direction == "N":
-        requested_space = (x,y-1)
-        try:
-            available_space.remove(requested_space)
-        except(ValueError):
-            try:
-                apple.remove(requested_space)
-            except(ValueError):
-                print("Tööt!")
-            else:
-                snake.insert(0,requested_space)
-                snake.append(old_space)
-        else:
-            snake.insert(0,requested_space)
-            available_space.append(old_space)
-    elif direction == "S":
-        requested_space = (x,y+1)
-        try:
-            available_space.remove(requested_space)
-        except(ValueError):
-            try:
-                apple.remove(requested_space)
-            except(ValueError):
-                print("Tööt!")
-            else:
-                snake.insert(0,requested_space)
-                snake.append(old_space)
-        else:
-            snake.insert(0,requested_space)
-            available_space.append(old_space)
+def move_snake(direction, available_space, snake, apple):
+    """ Moves snake. On apple, extend the snake. Return false on losing conditions """
+    x1,y1 = snake[0]
+    d_coords = {"N":(0,-1), "W":(-1,0), "S":(0,1), "E":(1,0)}
+    x2, y2 = d_coords[direction]
+    #If met with an apple
+    if apple.count((x1+x2,y1+y2)) != 0:
+        snake.insert(0,(x1+x2,y1+y2))
+        available_space.remove((x1+x2,y1+y2))
+        apple.remove((x1+x2,y1+y2))
+        return True
+    #If met with an empty space
+    elif available_space.count((x1+x2,y1+y2)) != 0:
+        snake.insert(0,(x1+x2,y1+y2))
+        available_space.remove((x1+x2,y1+y2))
+        tail = snake.pop(-1)
+        available_space.append(tail)
+        return True
     else:
-        pass
+        return False
+        
 def init_room(height = 11, width = 11):
     """ Initializes 10x10 room and list of available coordinates. Additional borders for better viewing pleasure """
     room = []
@@ -184,25 +137,33 @@ def print_room(room, snake, apple, available_space):
 
 if __name__ == "__main__":
     """ Main game loop """
-    snake = []
-    apple = []
+    flag_victory = False
     room, available_space = init_room(20,20)
-    
     #moving worm with keypress
     #msvcrt / getwch only works on windows
     snake = spawn_snake(available_space)
+    apple = spawn_apple(available_space)
     direction = "E"
     while True:
-        if check_moves(available_space) == True:
-            if check_apple(apple) == True:
-                direction = turn_snake(direction)
-                cls()
-                move_snake(direction, available_space, snake)
-                print_room(room, snake, apple, available_space)
-            elif check_apple(apple) == False:
+        if check_if_empty(available_space) == False:
+            if check_if_empty(apple) == True:
                 apple = spawn_apple(available_space)
+            else:
+                direction = turn_snake(direction, available_space, snake)
+                cls()
+                if move_snake(direction, available_space, snake, apple) == True:
+                    print_room(room, snake, apple, available_space)
+                else:
+                    break
         else:
-            print("Voitit pelin!")
-
+            flag_victory = True
+            break
+    print_room(room, snake, apple, available_space)
+    if flag_victory == True:
+        print("You win!")
+    else:
+        print("You lose!")
+    
+    
    
 
