@@ -4,7 +4,6 @@ from msvcrt import getwche, kbhit
 from time import time
 
 SPEED = 7
-SCORE = 0
 
 def cls():
     """ Attempts to clear the console depending on OS """
@@ -61,8 +60,8 @@ def get_keypress():
     else:
         return "Forward"
 
-def turn_snake(direction):
-    """ Turns snake relative to previous direction """
+def turn_snake(direction, available_space, apple):
+    """ Turns snake relative to previous direction IF available """
     directions = ["N", "W", "S", "E"]
     turn = get_keypress()
     if turn == "Right":
@@ -84,7 +83,6 @@ def turn_snake(direction):
             return direction
     else:
         return direction
-    
     
 def move_snake(direction,available_space,snake):
     """ Get direction and check if next coordinate is available. If true, moves snake by setting new coordinate as index 0 and removing index -1. snake[-1] coordinate also comes available so append it to "available_space" list """
